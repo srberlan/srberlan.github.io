@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sara R. Berlanas · Astrophysicist</title>
+  <meta name="description" content="Sara Rodríguez Berlanas, astrophysicist at the Instituto de Astrofísica de Canarias and Universidad de La Laguna. Massive stars, OB associations and large spectroscopic surveys.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+
+  <style>
+    /* =====================================================================
+       COLOURS AND SIZES: change them here
+       ===================================================================== */
+    :root {
+      --text: #ffffff;
+      --text-soft: rgba(255, 255, 255, 0.72);
+      --line: rgba(255, 255, 255, 0.55);
+      --line-soft: rgba(255, 255, 255, 0.18);
+      --panel: rgba(18, 22, 30, 0.88);
+      --accent: #f2c35c;            /* warm star colour for links and highlights */
+      --overlay: rgba(8, 10, 18, 0.45);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: "Source Sans 3", "Source Sans Pro", Helvetica, Arial, sans-serif;
+      font-weight: 300;
+      font-size: 17px;
+      line-height: 1.65;
+      color: var(--text);
+      background-color: #0b0e17;
+      overflow-x: hidden;
+    }
+
+    /* ---------------------------------------------------------------------
+       Background: put your photo in images/bg.jpg.
+       If the photo is missing, a night-sky gradient is shown instead.
+       --------------------------------------------------------------------- */
+    #bg {
+      position: fixed; inset: 0; z-index: 0;
+      background-color: #0b0e17;
+      background-image:
+        linear-gradient(var(--overlay), var(--overlay)),
+        url("images/bg.jpg"),
+        radial-gradient(ellipse at 30% 20%, rgba(70, 90, 170, 0.45), transparent 55%),
+        radial-gradient(ellipse at 75% 70%, rgba(150, 70, 120, 0.35), transparent 55%),
+        radial-gradient(ellipse at 50% 110%, rgba(240, 180, 90, 0.18), transparent 60%);
+      background-size: cover, cover, cover, cover, cover;
+      background-position: center;
+      transition: filter 0.4s ease, transform 0.4s ease;
+    }
+    #stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    body:has(article:target) #bg { filter: blur(3px); transform: scale(1.03); }
+
+    a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted rgba(242, 195, 92, 0.6); }
+    a:hover { border-bottom-color: transparent; color: #ffd98a; }
+
+    /* ---------------------------------------------------------------------
+       Front page: logo, name and menu
+       --------------------------------------------------------------------- */
+    #wrapper {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 4rem 1rem;
+    }
+
+    #header {
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      max-width: 100%;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+    body:has(article:target) #header { opacity: 0; transform: scale(0.96); pointer-events: none; }
+
+    .logo {
+      width: 5.5rem; height: 5.5rem;
+      border: 1px solid var(--text); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      font-size: 1.6rem; font-weight: 600; letter-spacing: 0.08em;
+    }
+    .logo img { width: 100%; height: 100%; object-fit: cover; }
+
+    .stem { width: 1px; height: 3.2rem; background: var(--text); }
+
+    .content {
+      border-top: 1px solid var(--text); border-bottom: 1px solid var(--text);
+      padding: 2.4rem 2rem;
+      max-width: 44rem;
+    }
+    .content h1 {
+      font-weight: 600; text-transform: uppercase; letter-spacing: 0.35em;
+      font-size: 2.1rem; line-height: 1.3; margin-bottom: 0.9rem;
+      padding-left: 0.35em; /* balances the letter-spacing */
+    }
+    .content p {
+      text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.8rem; line-height: 2;
+      color: var(--text-soft);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem;
+      max-width: 62rem;
+    }
+    nav a {
+      display: block;
+      border: 1px solid var(--text); border-radius: 4px;
+      padding: 0 1.3rem; height: 2.9rem; line-height: 2.9rem;
+      color: var(--text);
+      text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.78rem; font-weight: 400;
+      white-space: nowrap;
+      transition: background-color 0.2s ease;
+    }
+    nav a:hover { background: rgba(255, 255, 255, 0.08); color: var(--text); }
+
+    #footer {
+      margin-top: 2.5rem;
+      font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--text-soft); text-align: center;
+      transition: opacity 0.35s ease;
+    }
+    body:has(article:target) #footer { opacity: 0; }
+
+    /* ---------------------------------------------------------------------
+       Section panels (open when you click a menu button)
+       --------------------------------------------------------------------- */
+    #main article {
+      display: none;
+      position: fixed; inset: 0; z-index: 2;
+      overflow-y: auto;
+      padding: 4rem 1rem;
+    }
+    #main article:target { display: block; animation: show 0.35s ease; }
+    @keyframes show { from { opacity: 0; transform: translateY(0.6rem); } to { opacity: 1; transform: none; } }
+
+    .panel {
+      position: relative;
+      max-width: 46rem; margin: 0 auto;
+      background: var(--panel);
+      border-radius: 4px;
+      padding: 3rem 3rem 2.2rem;
+      box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.35);
+    }
+
+    .close {
+      position: absolute; top: 0.6rem; right: 0.6rem;
+      width: 2.6rem; height: 2.6rem; border: 0; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-soft); font-size: 1.6rem; line-height: 1;
+    }
+    .close:hover { background: rgba(255, 255, 255, 0.08); color: var(--text); }
+
+    .panel h2 {
+      display: inline-block;
+      text-transform: uppercase; letter-spacing: 0.25em; font-weight: 600; font-size: 1.35rem;
+      border-bottom: 1px solid var(--text);
+      padding-bottom: 0.4rem; margin-bottom: 1.8rem;
+    }
+    .panel h3 {
+      text-transform: uppercase; letter-spacing: 0.15em; font-weight: 600; font-size: 0.9rem;
+      margin: 2rem 0 0.8rem; color: var(--accent);
+    }
+    .panel p { margin-bottom: 1.1rem; }
+    .panel ul, .panel ol { margin: 0 0 1.2rem 1.2rem; }
+    .panel li { margin-bottom: 0.55rem; }
+    .panel strong { font-weight: 600; }
+    .muted { color: var(--text-soft); font-size: 0.92rem; }
+
+    .image { display: block; width: 100%; border-radius: 4px; margin: 0 0 1.6rem; }
+    .image img { width: 100%; display: block; border-radius: 4px; }
+
+    /* Key figures (publications, nights, etc.) */
+    .stats {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr)); gap: 0.8rem;
+      margin: 0 0 1.8rem;
+    }
+    .stat { border: 1px solid var(--line-soft); border-radius: 4px; padding: 0.9rem 0.8rem; text-align: center; }
+    .stat b { display: block; font-size: 1.7rem; font-weight: 600; line-height: 1.2; color: var(--accent); }
+    .stat span { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-soft); }
+
+    /* Highlight cards */
+    .highlight { display: grid; grid-template-columns: 1fr; gap: 1.2rem; margin-bottom: 1.6rem; align-items: start; }
+    .highlight:has(.thumb) { grid-template-columns: 9rem 1fr; }
+    .highlight .thumb {
+      width: 9rem; aspect-ratio: 4 / 3; border-radius: 4px; overflow: hidden;
+      background: linear-gradient(135deg, rgba(70, 90, 170, 0.5), rgba(150, 70, 120, 0.4));
+    }
+    .highlight .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .highlight h4 { font-weight: 600; font-size: 1.02rem; line-height: 1.35; margin-bottom: 0.3rem; }
+    .highlight p { margin-bottom: 0.3rem; font-size: 0.97rem; }
+
+    /* Simple lists with a date column */
+    .timeline { list-style: none; margin-left: 0 !important; }
+    .timeline li { display: grid; grid-template-columns: 6.5rem 1fr; gap: 1rem; padding: 0.55rem 0; border-top: 1px solid var(--line-soft); margin: 0; }
+    .timeline li:last-child { border-bottom: 1px solid var(--line-soft); }
+    .timeline .when { color: var(--text-soft); font-size: 0.9rem; }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 1.6rem; }
+    .tags span { border: 1px solid var(--line-soft); border-radius: 999px; padding: 0.15rem 0.8rem; font-size: 0.85rem; color: var(--text-soft); }
+
+    .buttons { display: flex; flex-wrap: wrap; gap: 0.7rem; margin: 0.4rem 0 1.4rem; }
+    .button {
+      display: inline-block; border: 1px solid var(--line); border-radius: 4px;
+      padding: 0.45rem 1.1rem; color: var(--text);
+      text-transform: uppercase; letter-spacing: 0.15em; font-size: 0.75rem; font-weight: 400;
+    }
+    .button:hover { background: rgba(255, 255, 255, 0.08); color: var(--text); border-color: var(--text); }
+
+    .pubs li { font-size: 0.97rem; }
+    .pubs .venue { color: var(--text-soft); }
+
+    .panel-footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--line-soft); font-size: 0.8rem; color: var(--text-soft); }
+
+    /* ---------------------------------------------------------------------
+       Phones and small screens
+       --------------------------------------------------------------------- */
+    @media (max-width: 760px) {
+      body { font-size: 16px; }
+      .content { padding: 1.8rem 0.6rem; }
+      .content h1 { font-size: 1.45rem; letter-spacing: 0.2em; padding-left: 0.2em; }
+      .content p { font-size: 0.72rem; letter-spacing: 0.12em; }
+      nav ul { flex-direction: column; width: 16rem; gap: 0.5rem; }
+      nav a { text-align: center; }
+      .panel { padding: 2.6rem 1.3rem 1.6rem; }
+      .highlight, .highlight:has(.thumb) { grid-template-columns: 1fr; }
+      .highlight .thumb { width: 100%; }
+      .timeline li { grid-template-columns: 1fr; gap: 0.1rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="bg"></div>
+  <canvas id="stars" aria-hidden="true"></canvas>
+
+  <div id="wrapper">
+
+    <!-- ===================================================================
+         FRONT PAGE
+         =================================================================== -->
+    <header id="header">
+      <!-- Your photo: save it as images/sara.jpg. Without it, the initials are shown. -->
+      <div class="logo"><img src="images/sara.jpg" alt="Sara R. Berlanas" onerror="this.replaceWith('SRB')"></div>
+      <div class="stem"></div>
+      <div class="content">
+        <h1>Sara R. Berlanas</h1>
+        <p>Astrophysicist · Viera y Clavijo fellow<br>Instituto de Astrofísica de Canarias &amp; Universidad de La Laguna</p>
+      </div>
+      <div class="stem"></div>
+      <nav>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#meigas">MEIGAS</a></li>
+          <li><a href="#research">Research</a></li>
+          <li><a href="#publications">Publications &amp; Talks</a></li>
+          <li><a href="#collaborations">Collaborations</a></li>
+          <li><a href="#projects">Projects &amp; Observing</a></li>
+          <li><a href="#teaching">Teaching</a></li>
+          <li><a href="#service">Service &amp; Outreach</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <footer id="footer">© Sara Rodríguez Berlanas · Last updated October 2026</footer>
+
+    <!-- ===================================================================
+         SECTIONS
+         Each <article> is one panel. To edit a section, change the text
+         between its <article ...> and </article> tags.
+         =================================================================== -->
+    <div id="main">
+
+      <!-- ABOUT ========================================================== -->
+      <article id="about" aria-label="About me">
+        <div class="panel">
+          <a href="#" class="close" aria-label="Close">×</a>
+          <h2>About me</h2>
+          <span class="image"><img src="images/about.jpg" alt="" onerror="this.parentElement.remove()"></span>
+
+          <p>I am a <strong>Viera y Clavijo fellow</strong> at the <a href="https://www.iac.es">Instituto de Astrofísica de Canarias (IAC)</a> and the <a href="https://www.ull.es">Universidad de La Laguna (ULL)</a>. My research focuses on the <strong>spectroscopic and dynamical study of massive stars and the star-forming regions where they are born</strong>, combining high-quality spectroscopy, Gaia astrometry and large spectroscopic surveys.</p>
+
+          <p>I lead <a href="#meigas">MEIGAS</a>, a research programme devoted to the multi-wavelength exploration of massive star-forming regions and OB associations in the Milky Way and beyond. Within the WEAVE-SCIP survey, I lead the <strong>OB-star component</strong> of the survey, co-lead <strong>SWAN</strong> (the high-resolution survey of Cygnus-X) and the <strong>Science Verification of massive stars</strong>, and I am the lead member of the <strong>SCIP Survey Working Group</strong>.</p>
+
+          <p>I obtained my PhD in Astrophysics at the IAC-ULL in 2019 (<em>Massive stars in Cygnus OB2</em>, supervised by Prof. Artemio Herrero), which received the <strong>Extraordinary PhD Award</strong> of the ULL. Since then, I have held postdoctoral positions at the Universidad de Alicante (Juan de la Cierva fellow), Keele University (Margarita Salas fellow), the ULL and the Centro de Astrobiología (CSIC-INTA), before returning to Tenerife in December 2025.</p>
+
+          <div class="tags">
+            <span>Massive stars</span><span>OB associations</span><span>Star-forming regions</span>
+            <span>Stellar spectroscopy</span><span>Gaia</span><span>Large spectroscopic surveys</span>
+            <span>Runaway stars</span><span>Stellar rotation</span>
+          </div>
+
+          <h3>Career</h3>
+          <ul class="timeline">
+            <li><span class="when">2025 – now</span><span>Viera y Clavijo fellow, IAC &amp; Universidad de La Laguna</span></li>
+            <li><span class="when">2025</span><span>Postdoctoral researcher, Centro de Astrobiología (CSIC-INTA), Madrid</span></li>
+            <li><span class="when">2024 – 2025</span><span>Margarita Salas fellow, Universidad de La Laguna</span></li>
+            <li><span class="when">2022 – 2023</span><span>Margarita Salas fellow, Keele University, UK</span></li>
+            <li><span class="when">2022 – 2023</span><span>Juan de la Cierva fellow, Universidad de Alicante</span></li>
+            <li><span class="when">2019 – 2021</span><span>Postdoctoral researcher, Universidad de Alicante</span></li>
+            <li><span class="when">2014 – 2019</span><span>PhD in Astrophysics (FPI fellow), IAC &amp; Universidad de La Laguna</span></li>
+          </ul>
+
+          <div class="buttons">
+            <a class="button" href="files/CV_SRBerlanas.pdf">Full CV (PDF)</a>
+            <a class="button" href="https://orcid.org/0000-0002-2613-8564">ORCID</a>
+            <a class="button" href="https://ui.adsabs.harvard.edu/search/q=author%3A(%22berlanas%22)&amp;sort=date%20desc%2C%20bibcode%20desc">ADS</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- MEIGAS ========================================================= -->
+      <article id="meigas" aria-label="MEIGAS">
+        <div class="panel">
+          <a href="#" class="close" aria-label="Close">×</a>
+          <h2>MEIGAS</h2>
+          <p class="muted">Multi-wavelength Exploration of massIve star-forminG regions and ASsociations</p>
+          <span class="image"><img src="images/meigas.jpg" alt="" onerror="this.parentElement.remove()"></span>
+
+          <p>Large spectroscopic surveys such as <strong>WEAVE</strong> and <strong>4MOST</strong> are about to deliver spectra for an unprecedented number of massive stars. Combined with Gaia astrometry and photometry, they will make it possible, for the first time, to study massive stars and their birth environments in a statistically robust way.</p>
+
+          <p><strong>MEIGAS</strong> is the research programme I lead to take advantage of this new landscape. Its goal is to carry out comprehensive, multi-wavelength studies of the major massive star-forming regions and OB associations of the Milky Way and nearby galaxies, in order to improve our understanding of:</p>
+          <ul>
+            <li>how massive stars and their host associations form and evolve;</li>
+            <li>the poorly known evolutionary pathways of massive stars, including the role of rotation and binarity;</li>
+            <li>the dynamics of young stellar populations and the origin of runaway stars.</li>
+          </ul>
+
+          <p>MEIGAS builds on my leading roles in WEAVE, my experience in the analysis of massive stars, and a collaboration network spanning several of the main surveys of massive stars (WEAVE, 4MOST, Gaia-ESO, XShootU, BLOeM).</p>
+
+          <p class="muted">Presented at IAU Symposium 402 (2025): <a href="https://arxiv.org/abs/2511.03018">Berlanas, <em>Massive stars in the era of large spectroscopic surveys: the MEIGAS project</em></a>.</p>
+        </div>
+      </article>
+
+      <!-- RESEARCH ======================================================= -->
+      <article id="research" aria-label="Research and highlights">
+        <div class="panel">
+          <a href="#" class="close" aria-label="Close">×</a>
+          <h2>Research</h2>
+
+          <p>My research combines quantitative spectroscopy of massive stars with Gaia astrometry to understand how massive stars form, evolve and interact with their environment. My main lines of work are:</p>
+          <ul>
+            <li><strong>Massive star-forming regions and OB associations</strong>: Cygnus OB2 and Cygnus-X, the Carina Nebula (Car OB1) and Cas OB5.</li>
+            <li><strong>Rotation of massive stars</strong>: the origin of slow and fast rotators, and its link with binary evolution.</li>
+            <li><strong>Runaway stars and Galactic dynamics</strong>: what OB stars reveal about the kinematics of the Galactic disc.</li>
+            <li><strong>Large spectroscopic surveys</strong>: preparation and scientific exploitation of WEAVE, 4MOST and Gaia-ESO.</li>
+          </ul>
+
+          <h3>Recent highlights</h3>
+
+          <div class="highlight">
+            <div class="thumb"><img src="images/hl-rotation.jpg" alt="" onerror="this.parentElement.remove()"></div>
+            <div>
+              <h4>The Galactic rotation curve traced by young massive stars</h4>
+              <p>Using more than 14,000 spectroscopically confirmed OB stars from the ALS III catalogue and Gaia DR3, we derived the rotation curve of the Milky Way between 5.5 and 11 kpc with the least dynamically evolved tracer available. The stars departing most from the curve form the largest sample of OB runaway candidates compiled to date.</p>
+              <p class="muted"><a href="https://arxiv.org/abs/2610.32537">Berlanas et al. 2026, submitted to A&amp;A</a></p>
+            </div>
+          </div>
+
+          <div class="highlight">
+            <div class="thumb"><img src="images/hl-fastrot.jpg" alt="" onerror="this.parentElement.remove()"></div>
+            <div>
+              <h4>The lack of fast rotators in Cygnus OB2</h4>
+              <p>A spectral reclassification of the B0 population of Cyg OB2, led by my PhD student, sheds light on why this massive association seems to lack fast-rotating stars.</p>
+              <p class="muted"><a href="https://arxiv.org/abs/2510.15540">Galán-Diéguez, Berlanas et al. 2025, A&amp;A</a></p>
+            </div>
+          </div>
+
+          <div class="highlight">
+            <div class="thumb"><img src="images/hl-carina.jpg" alt="" onerror="this.parentElement.remove()"></div>
+            <div>
+              <h4>Massive stars in the Carina Nebula</h4>
+              <p>Within the Gaia-ESO Survey, I built a new census of OB stars in Carina and carried out the spectroscopic analysis of its O-star population.</p>
+              <p class="muted"><a href="https://doi.org/10.1051/0004-6361/202245335">Berlanas et al. 2023, A&amp;A</a> · <a href="https://doi.org/10.1051/0004-6361/202453269">Berlanas et al. 2025, A&amp;A</a></p>
+            </div>
+          </div>
+
+          <div class="highlight">
+            <div class="thumb"><img src="images/hl-bloem.jpg" alt="" onerror="this.parentElement.remove()"></div>
+            <div>
+              <h4>Close massive binaries at low metallicity</h4>
+              <p>The BLOeM survey has revealed a high fraction of close massive binaries in the Small Magellanic Cloud, where I lead the analysis of projected rotational velocities of the OB sample.</p>
+              <p class="muted"><a href="https://doi.org/10.1038/s41550-025-02610-x">Sana et al. 2025, Nature Astronomy</a></p>
+            </div>
+          </div>
+
+          <div class="highlight">
+            <div class="thumb"><img src="images/hl-cygob2.jpg" alt="" onerror="this.parentElement.remove()"></div>
+            <div>
+              <h4>The structure and star-formation history of Cygnus OB2</h4>
+              <p>Combining spectroscopy and Gaia, we found evidence of multiple star-forming bursts in Cyg OB2 and disentangled its spatial substructure.</p>
+              <p class="muted"><a href="https://doi.org/10.1051/0004-6361/202039015">Berlanas et al. 2020, A&amp;A</a> · <a href="https://doi.org/10.1093/mnras/stz117">Berlanas et al. 2019, MNRAS</a></p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- PUBLICATIONS & TALKS =========================================== -->
+      <article id="publications" aria-label="Publications and talks">
+        <div class="panel">
+          <a href="#" class="close" aria-label="Close">×</a>
+          <h2>Publications &amp; Talks</h2>
+
+          <div class="stats">
+            <div class="stat"><b>100+</b><span>Publications</span></div>
+            <div class="stat"><b>49</b><span>Refereed papers</span></div>
+            <div class="stat"><b>1,350+</b><span>Citations</span></div>
+            <div class="stat"><b>16</b><span>h-index</span></div>
+          </div>
+
+          <div class="buttons">
+            <a class="button" href="https://ui.adsabs.harvard.edu/search/q=author%3A(%22berlanas%22)&amp;sort=date%20desc%2C%20bibcode%20desc">Full list on ADS</a>
+            <a class="button" href="https://orcid.org/0000-0002-2613-8564">ORCID</a>
+          </div>
+
+          <h3>Selected first-author and lead papers</h3>
+          <ol class="pubs">
+            <li><a href="https://arxiv.org/abs/2610.32537">The Galactic rotation curve from the ALS III catalogue of OB stars</a>. <span class="venue">Berlanas et al. 2026, submitted to A&amp;A (arXiv:2610.32537)</span></li>
+            <li><a href="https://arxiv.org/abs/2510.15540">The lack of fast rotators in Cyg OB2. I. Insights from spectral reclassification of its B0 population</a>. <span class="venue">Galán-Diéguez, Berlanas et al. 2025, A&amp;A (PhD student)</span></li>
+            <li><a href="https://doi.org/10.1051/0004-6361/202453269">Gaia-ESO Survey: massive stars in the Carina Nebula. II. The spectroscopic analysis of the O-star population</a>. <span class="venue">Berlanas et al. 2025, A&amp;A, 695, A248</span></li>
+            <li><a href="https://doi.org/10.1051/0004-6361/202452615">Quantifying the scale of star formation across the Perseus spiral arm using young clusters around Cas OB5</a>. <span class="venue">Quintana, Negueruela &amp; Berlanas 2025, A&amp;A, 697, A47</span></li>
+            <li><a href="https://doi.org/10.1051/0004-6361/202245335">Gaia-ESO Survey: massive stars in the Carina Nebula. I. A new census of OB stars</a>. <span class="venue">Berlanas et al. 2023, A&amp;A</span></li>
+            <li><a href="https://doi.org/10.1093/mnras/stab3660">The nature of the Cygnus extreme B supergiant 2MASS J20395358+4222505</a>. <span class="venue">Herrero, Berlanas et al. 2022, MNRAS, 511, 3113</span></li>
+            <li><a href="https://doi.org/10.1051/0004-6361/202039015">Spectroscopic characterization of the known O-star population in Cygnus OB2. Evidence of multiple star-forming bursts</a>. <span class="venue">Berlanas et al. 2020, A&amp;A, 642, A168</span></li>
+            <li><a href="https://doi.org/10.1093/mnras/stz117">Disentangling the spatial substructure of Cygnus OB2 from Gaia DR2</a>. <span class="venue">Berlanas et al. 2019, MNRAS, 484, 1838</span></li>
+            <li><a href="https://doi.org/10.1051/0004-6361/201833989">Oxygen and silicon abundances in Cygnus OB2. Chemical homogeneity in a sample of OB slow rotators</a>. <span class="venue">Berlanas et al. 2018, A&amp;A, 620, A56</span></li>
+            <li><a href="https://doi.org/10.1051/0004-6361/201731856">New massive members of Cygnus OB2</a>. <span class="venue">Berlanas et al. 2018, A&amp;A, 612, A50</span></li>
+          </ol>
+
+          <h3>Selected collaboration papers</h3>
+          <ul class="pubs">
+            <li><a href="https://doi.org/10.1038/s41550-025-02610-x">A high fraction of close massive binary stars at low metallicity</a>. <span class="venue">Sana et al. 2025, Nature Astronomy, 9, 1337</span></li>
+            <li><a href="https://doi.org/10.1093/mnras/staf1409">The Alma catalogue of OB stars. III. A cross-match with Gaia DR3 and an extension based on new spectral classifications</a>. <span class="venue">Pantaleoni González et al. 2025, MNRAS, 543, 63</span></li>
+            <li><a href="https://doi.org/10.1051/0004-6361/202451586">Binarity at LOw Metallicity (BLOeM). I. A spectroscopic VLT monitoring survey of massive stars in the SMC</a>. <span class="venue">Shenar et al. 2024, A&amp;A, 690, A289</span></li>
+            <li><a href="https://doi.org/10.1093/mnras/stad557">The wide-field, multiplexed, spectroscopic facility WEAVE: survey design, overview, and simulated implementation</a>. <span class="venue">Jin et al. 2024, MNRAS</span></li>
+          </ul>
+
+          <h3>Invited talks</h3>
+          <ul class="timeline">
+            <li><span class="when">Jan 2026</span><span><em>High-mass stars &amp; star-forming regions</em>. Gaia-NIR meeting, Sevilla, Spain</span></li>
+            <li><span class="when">Sep 2025</span><span><em>Massive OB associations in the era of large spectroscopic surveys</em>. IAU Division G2 conference series (online)</span></li>
+            <li><span class="when">Oct 2024</span><span><em>Massive stars in OB associations</em>. Topical Overview on Star Cluster Astrophysics (TOSCA), Siena, Italy</span></li>
+            <li><span class="when">Sep 2024</span><span><em>WEAVE and 4MOST: incoming large spectroscopic surveys for studying massive stars</em>. Rodolfo Barbá memorial meeting, Madrid, Spain</span></li>
+            <li><span class="when">Sep 2024</span><span>Invited participant. <em>Winds across the Universe</em>, ESAC, Madrid, Spain</span></li>
+          </ul>
+
+          <h3>Selected contributed talks</h3>
+          <ul class="timeline">
+            <li><span class="when">Nov 2026</span><span><em>Unraveling massive star ejections: the largest 5D kinematic catalog of Galactic runaway OB stars ahead of WEAVE, 4MOST, and Gaia DR4</em>. Stars on the Run III, Beijing, China</span></li>
+            <li><span class="when">Sep 2025</span><span><em>Massive stars in the era of large spectroscopic surveys: the MEIGAS project</em>. IAU Symposium 402, Ensenada, Mexico</span></li>
+            <li><span class="when">Sep 2024</span><span><em>Early BLOeM highlights: rotational velocities for OB stars</em>. VFTS meeting, ESAC, Madrid, Spain</span></li>
+            <li><span class="when">Jul 2023</span><span><em>SCIP and the high-resolution survey in Cygnus-X</em>. EAS Annual Meeting, Kraków, Poland</span></li>
+            <li><span class="when">Sep 2022</span><span><em>Gaia and the upcoming WEAVE Cygnus-X Survey</em>. Stellar evolution along the HR diagram with Gaia, Naples, Italy</span></li>
+            <li><span class="when">Jun 2022</span><span><em>WEAVE, Gaia, and the Cygnus-X complex: a perfect synergy</em>. EAS Annual Meeting, Valencia, Spain</span></li>
+            <li><span class="when">Jul 2021</span><span><em>The impact of rotational mixing on massive stars</em>. EAS Annual Meeting (online)</span></li>
+            <li><span class="when">Apr 2019</span><span><em>A new view of Cygnus OB2 from Gaia DR2</em>. 53rd ESLAB Symposium: The Gaia Universe, Noordwijk, The Netherlands</span></li>
+            <li><span class="when">Feb 2018</span><span><em>Exploring massive stars in the Cygnus OB2 association</em>. Star formation and young stars in Cygnus, Keele, UK</span></li>
+          </ul>
+          <p class="muted">More than 25 contributions to national and international conferences. The complete list is available in my <a href="files/CV_SRBerlanas.pdf">CV</a>.</p>
+        </div>
+      </article>
+
+      <!-- COLLABORATIONS & LEADERSHIP ===================================== -->
+      <article id="collaborations" aria-label="Collaborations and leadership">
+        <div class="panel">
+          <a href="#" class="close" aria-label="Close">×</a>
+          <h2>Collaborations</h2>
+          <span class="image"><img src="images/weave.jpg" alt="" onerror="this.parentElement.remove()"></span>
+
+          <h3>WEAVE (2019 – present)</h3>
+          <p><a href="https://weave-project.atlassian.net/wiki/spaces/WEAVE/overview">WEAVE</a> is the new wide-field multi-object spectroscopic facility of the 4.2-m William Herschel Telescope at the Roque de los Muchachos Observatory. Within the <strong>Stellar, Circumstellar and Interstellar Physics (SCIP)</strong> survey, led by Prof. Janet Drew:</p>
+          <ul>
+            <li><strong>Lead of the OB-star component of the SCIP survey</strong>: selection of the high-mass stellar population and coordination of its scientific exploitation.</li>
+            <li><strong>Co-lead of SWAN</strong>, the WEAVE-SCIP high-resolution survey of Cygnus-X: target selection of massive-star candidates, observing strategy and preparation for early science.</li>
+            <li><strong>Co-lead of the Science Verification of massive stars</strong>, and lead author of the first SCIP Science Verification paper, on Cygnus OB2 (to be submitted soon).</li>
+            <li><strong>Lead member of the SCIP Survey Working Group</strong> (since 2019; a two-person team): collation of target lists and survey densities from the whole SCIP team (50+ members), catalogue creation and combination, tiling strategy, field construction, operational rehearsal and observing configurations.</li>
+            <li>Member of the <strong>SCIP Quality Assurance Group</strong>, validating data quality and designing evaluation procedures for the spectroscopic pipeline.</li>
+            <li>Awarded <strong>WEAVE Survey Builder</strong> status (2021) in recognition of significant contributions to the preparation of the SCIP survey.</li>
+          </ul>
+
+          <h3>Other surveys and collaborations</h3>
+          <ul>
+            <li><strong>Gaia-ESO Survey</strong> (2015 – present): Working Group 13, leading the analysis of the hottest stars of the survey.</li>
+            <li><strong>BLOeM</strong>, Binarity at LOw Metallicity, ESO Large Programme (2024 – present): leading the projected rotational velocity analysis of the OB sample in the SMC.</li>
+            <li><strong>XShootU</strong>, the ULLYSES and X-Shooter massive-star collaboration (2022 – present): Stellar Atmospheres and Benchmarking team.</li>
+            <li><strong>4MOST</strong>, 4MIDABLE-OB sub-survey (2022 – present): selection of OB candidates in the Carina region.</li>
+            <li><strong>MEGASTAR</strong>, the MEGARA-GTC stellar spectral library (2018 – present): leading the analysis of the hottest stars.</li>
+            <li><strong>GOSSS</strong> and the <strong>Alma catalogue of OB stars (ALS)</strong>.</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- PROJECTS & OBSERVING =========================================== -->
+      <article id="projects" aria-label="Projects and observing time">
+        <div class="panel">
+          <a href="#" class="close" aria-label="Close">×</a>
+          <h2>Projects &amp; Observing</h2>
+
+          <div class="stats">
+            <div class="stat"><b>12</b><span>Proposals as PI</span></div>
+            <div class="stat"><b>40+</b><span>Nights as PI</span></div>
+            <div class="stat"><b>22</b><span>Proposals as Co-I</span></div>
+            <div class="stat"><b>54</b><span>Nights at the telescope</span></div>
+          </div>
+
+          <h3>Projects as Principal Investigator</h3>
+          <ul class="timeline">
+            <li><span class="when">2025</span><span><strong>Multi-wavelength Exploration of massIve star-forminG regions and ASsociations (MEIGAS).</strong> César Nombela programme (Atracción de Talento), Comunidad de Madrid (2025-T1/TEC-36201). Awarded (declined).</span></li>
+            <li><span class="when">2025 – 2028</span><span><strong>Star-forming regions to explore fast rotation of massive O stars.</strong> Viera y Clavijo programme, Universidad de La Laguna.</span></li>
+            <li><span class="when">2022 – 2024</span><span><strong>A comprehensive multi-dimensional study of the Cygnus-X star-forming complex.</strong> Margarita Salas programme, Ministerio de Universidades (Keele University &amp; ULL).</span></li>
+            <li><span class="when">2022 – 2023</span><span><strong>Massive stars in OB associations and clusters.</strong> Juan de la Cierva-Formación, Ministerio de Ciencia e Innovación (FJC2020-045785-I).</span></li>
+          </ul>
+
+          <h3>Participation in research projects</h3>
+          <ul>
+            <li><strong>OCEANS</strong>: Overcoming challenges in the evolution and nature of massive stars. Horizon Europe MSCA Staff Exchanges (2025 – 2028).</li>
+            <li><strong>ACXIOMS</strong> and <strong>MECENAS</strong>: coordinated project on the early and late evolutionary channels of massive stars, Plan Estatal (2022 – 2025).</li>
+            <li><strong>Herramientas de inteligencia artificial para estrellas masivas</strong>, Generalitat Valenciana (2022 – 2025).</li>
+            <li><strong>Astrofísica masiva</strong> (PROMETEO), Generalitat Valenciana (2019 – 2022).</li>
+            <li><strong>LIfETIME</strong> and <strong>ONStaGE</strong>: coordinated project on massive-star evolution and supernova and gravitational-wave progenitors, Plan Estatal (2019 – 2021).</li>
+            <li><strong>Massive stars in the Local Universe</strong>, Plan Estatal (2016 – 2018).</li>
+          </ul>
+
+          <h3>Observing time</h3>
+          <p>I am PI of <strong>12 awarded observing proposals</strong> (more than 40 nights, including large programmes) at the Roque de los Muchachos and Teide observatories and at ESO, and Co-I of a further <strong>22 proposals</strong> (more than 140 nights and 425 filler hours, including the GTC MEGASTAR filler programme). I have carried out <strong>54 observing nights</strong> with spectrographs and imagers on five telescopes at the Roque de los Muchachos Observatory.</p>
+        </div>
+      </article>
+
+      <!-- TEACHING & SUPERVISION ========================================= -->
+      <article id="teaching" aria-label="Teaching and supervision">
+        <div class="panel">
+          <a href="#" class="close" aria-label="Close">×</a>
+          <h2>Teaching</h2>
+
+          <div class="stats">
+            <div class="stat"><b>380+</b><span>Teaching hours</span></div>
+            <div class="stat"><b>1</b><span>PhD student</span></div>
+            <div class="stat"><b>4</b><span>Bachelor theses</span></div>
+          </div>
+
+          <h3>University teaching</h3>
+          <ul class="timeline">
+            <li><span class="when">2024 – 2025</span><span><strong>Universidad de La Laguna</strong> (82 h): Técnicas Astrofísicas and Prácticas Externas (Degree in Physics), Física (Degree in Mathematics), Técnicas Astrofísicas de Objetos Extensos (Master in Astrophysics). Co-supervision of the Master's observing programme with the Las Cumbres Observatory network.</span></li>
+            <li><span class="when">2022</span><span><strong>Universidad Católica de Murcia</strong> (10 h): Curso de Experto en Astronomía.</span></li>
+            <li><span class="when">2020 – 2023</span><span><strong>Universidad de Alicante</strong> (294 h): Astrofísica Estelar and Fundamentos de Astrofísica (Degree in Physics).</span></li>
+          </ul>
+
+          <h3>Schools</h3>
+          <ul>
+            <li>Member of the Scientific Organising Committee of the <a href="https://meetings.iac.es/winterschool/2026/">XXXVII Canary Islands Winter School of Astrophysics</a> (IAC, November 2026), devoted to massive stars.</li>
+          </ul>
+
+          <h3>Supervision</h3>
+          <ul>
+            <li><strong>PhD:</strong> Daniel Galán-Diéguez, <em>Life channels and fate of the most massive stars</em> (ULL, 2023 – present).</li>
+            <li><strong>Bachelor theses</strong> (Universidad de Alicante):
+              <ul>
+                <li><em>En busca de la población oscurecida de estrellas OB en la región de Cygnus-X</em> (2024)</li>
+                <li><em>Análisis espectroscópico de estrellas tipo OB a partir de datos simulados de WEAVE</em> (2023)</li>
+                <li><em>Abundancias químicas en estrellas masivas</em> (2022)</li>
+                <li><em>Cúmulos abiertos jóvenes y la estructura espiral de la Galaxia</em> (2021)</li>
+              </ul>
+            </li>
+            <li><strong>Examination committees:</strong> one PhD thesis and one Master's thesis (ULL-IAC, 2024) and three Bachelor theses (ULL and Universidad de Alicante, 2023).</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- SERVICE & OUTREACH ============================================= -->
+      <article id="service" aria-label="Service and outreach">
+        <div class="panel">
+          <a href="#" class="close" aria-label="Close">×</a>
+          <h2>Service &amp; Outreach</h2>
+
+          <h3>Service to the community</h3>
+          <ul>
+            <li>Referee for <em>Nature</em>, <em>Astronomy &amp; Astrophysics</em>, <em>The Astrophysical Journal</em>, <em>The Astrophysical Journal Supplement Series</em> and <em>Astronomische Nachrichten</em>.</li>
+            <li>External reviewer of observing proposals for the European Southern Observatory (ESO).</li>
+            <li>SOC member of the XXXVII Canary Islands Winter School of Astrophysics (2026).</li>
+            <li>SOC chair of the symposium <em>The involvement of the Spanish community in WEAVE: from survey preparation to first science results</em>, XVI Scientific Meeting of the Spanish Astronomical Society (Granada, 2024).</li>
+            <li>Former organiser of the Severo Ochoa monthly meetings of the stellar and interstellar research line at the IAC.</li>
+            <li>Member of the Spanish Astronomical Society (SEA), the International Astronomical Union (IAU), the European Astronomical Society (EAS) and the Spanish Network for the scientific exploitation of Gaia (REG).</li>
+          </ul>
+
+          <h3>Outreach and equality</h3>
+          <ul>
+            <li>Member of the <strong>Comisión Mujeres y Astronomía</strong> of the SEA. Coordinator of its drawing contest <em>Mujer y Astronomía</em>, aimed at promoting STEM careers among girls.</li>
+            <li>Participation in <em>Chatea con una Astrónoma</em> (four editions) and <em>Hable con Ellas</em>.</li>
+            <li>Public talk <em>The secret life of stars</em>, Ciudad de las Artes y las Ciencias, Valencia (2025).</li>
+            <li>Talks in primary and secondary schools.</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- CONTACT ======================================================== -->
+      <article id="contact" aria-label="Contact">
+        <div class="panel">
+          <a href="#" class="close" aria-label="Close">×</a>
+          <h2>Contact</h2>
+
+          <p><strong>Sara Rodríguez Berlanas</strong><br>
+          Instituto de Astrofísica de Canarias<br>
+          C/ Vía Láctea, s/n<br>
+          38205 La Laguna, Tenerife, Spain</p>
+
+          <p>Email: <a href="mailto:srberlan@iac.es">srberlan@iac.es</a></p>
+
+          <div class="buttons">
+            <a class="button" href="https://orcid.org/0000-0002-2613-8564">ORCID</a>
+            <a class="button" href="https://ui.adsabs.harvard.edu/search/q=author%3A(%22berlanas%22)&amp;sort=date%20desc%2C%20bibcode%20desc">ADS</a>
+            <a class="button" href="https://github.com/srberlan">GitHub</a>
+            <a class="button" href="files/CV_SRBerlanas.pdf">CV (PDF)</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+
+  <script>
+    // Close a section with the Esc key or by clicking outside the panel.
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && location.hash) { location.hash = ""; }
+    });
+    document.querySelectorAll("#main article").forEach(function (art) {
+      art.addEventListener("click", function (e) { if (e.target === art) { location.hash = ""; } });
+    });
+
+    // Twinkling star field drawn on top of the background.
+    (function () {
+      var canvas = document.getElementById("stars");
+      var ctx = canvas.getContext("2d");
+      var stars = [];
+      var still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      function resize() {
+        var dpr = window.devicePixelRatio || 1;
+        canvas.width = innerWidth * dpr;
+        canvas.height = innerHeight * dpr;
+        canvas.style.width = innerWidth + "px";
+        canvas.style.height = innerHeight + "px";
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        var n = Math.round(innerWidth * innerHeight / 3500);
+        stars = [];
+        for (var i = 0; i < n; i++) {
+          stars.push({
+            x: Math.random() * innerWidth,
+            y: Math.random() * innerHeight,
+            r: Math.random() < 0.95 ? Math.random() * 0.9 + 0.2 : Math.random() * 1.3 + 0.9,
+            p: Math.random() * Math.PI * 2,
+            s: 0.5 + Math.random() * 1.5
+          });
+        }
+      }
+
+      function draw(t) {
+        ctx.clearRect(0, 0, innerWidth, innerHeight);
+        for (var i = 0; i < stars.length; i++) {
+          var st = stars[i];
+          var a = still ? 0.7 : 0.45 + 0.4 * Math.sin(st.p + t * 0.001 * st.s);
+          ctx.beginPath();
+          ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(255,255,255," + a.toFixed(3) + ")";
+          ctx.fill();
+        }
+        if (!still) requestAnimationFrame(draw);
+      }
+
+      addEventListener("resize", resize);
+      resize();
+      requestAnimationFrame(draw);
+    })();
+  </script>
+</body>
+</html>
