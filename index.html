@@ -50,8 +50,9 @@
         radial-gradient(ellipse at 30% 20%, rgba(70, 90, 170, 0.45), transparent 55%),
         radial-gradient(ellipse at 75% 70%, rgba(150, 70, 120, 0.35), transparent 55%),
         radial-gradient(ellipse at 50% 110%, rgba(240, 180, 90, 0.18), transparent 60%);
-      background-size: cover, cover, cover, cover, cover;
+      background-size: cover, contain, cover, cover, cover;
       background-position: center;
+      background-repeat: no-repeat;
       transition: filter 0.4s ease, transform 0.4s ease;
     }
     #stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; display: none; }
@@ -272,7 +273,7 @@
       </nav>
     </header>
 
-    <footer id="footer">© Sara Rodríguez Berlanas · Last updated October 2026</footer>
+    <footer id="footer">© Sara Rodríguez Berlanas · Last updated October 2026<br>Background image: Geminids 2013 over the Teide · Credit &amp; copyright: Juan Carlos Casado (TWAN, Earth and Stars)</footer>
 
     <!-- ===================================================================
          SECTIONS
